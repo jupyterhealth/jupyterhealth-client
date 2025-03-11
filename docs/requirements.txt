@@ -1,0 +1,10 @@
+autodoc-traits
+enum_tools[sphinx]
+intersphinx-registry
+jupyterhub-sphinx-theme
+myst-parser>=0.19
+sphinx==7.*
+sphinx-copybutton
+sphinx-jsonschema
+sphinxext-opengraph
+sphinxext-rediraffe
