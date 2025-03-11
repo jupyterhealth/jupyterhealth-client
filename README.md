@@ -1,6 +1,20 @@
-# singleuser-image for Jupyter Health pre-mvp
+# JupyterHealth client 
 
-This repo builds and publishes https://quay.io/repository/jupyterhealth/singleuser-premvp for the jupyter health pre-MVP
+A Python client library for the JupyterHealth exchange.
 
-The image is based on the scipy-notebook Jupyter image,
-adding dependencies for commonhealth cloud API access.
+Install:
+
+```
+pip install jupyter-health-client
+```
+
+Use:
+
+```python
+from jupyter_health_client import JupyterHealthClient
+
+client = JupyterHealthClient()
+```
+
+
+For more information, see [examples](https://jupyterhealth.org/software-documentation/)

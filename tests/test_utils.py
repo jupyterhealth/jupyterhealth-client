@@ -1,7 +1,7 @@
 import pytest
 from pandas import Timestamp
 
-from jupyter_health.utils import flatten_dict, tidy_observation
+from jupyter_health_client.utils import flatten_dict, tidy_observation
 
 # synthetic records matching real record structure
 glucose_record = {

@@ -1,5 +1,5 @@
 [project]
-name = "jupyter-health"
+name = "jupyter-health-client"
 description = "Jupyter Health client library"
 authors = [
     {name = "Jupyter", email = "benjaminrk@gmail.com"},
@@ -13,7 +13,7 @@ classifiers = [
 readme = "README.md"
 license = {file = "LICENSE"}
 dynamic = ["version"]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
     "pandas",
     "requests",
@@ -22,9 +22,9 @@ dependencies = [
 
 [project.urls]
 # this will eventually be in its own repo
-Documentation = "https://github.com/jupyterhealth/singleuser-image#readme"
-Issues = "https://github.com/jupyterhealth/singleuser-image/issues"
-Source = "https://github.com/jupyterhealth/singleuser-image"
+Documentation = "https://github.com/jupyterhealth/jupyter-health-client#readme"
+Issues = "https://github.com/jupyterhealth/jupyter-health-client/issues"
+Source = "https://github.com/jupyterhealth/jupyter-health-client"
 
 [project.optional-dependencies]
 test = ["pytest"]
@@ -59,7 +59,7 @@ select = [
 
 [tool.tbump]
 # this will eventually be in its own repo
-github_url = "https://github.com/jupyterhealth/singleuser-image"
+github_url = "https://github.com/jupyterhealth/jupyter-health-client"
 
 [tool.tbump.version]
 current = "0.0.1a1"
@@ -80,4 +80,4 @@ message_template = "Bump to {new_version}"
 tag_template = "{new_version}"
 
 [[tool.tbump.file]]
-src = "jupyter_health/__init__.py"
+src = "jupyter_health_client/__init__.py"

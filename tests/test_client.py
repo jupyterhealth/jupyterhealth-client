@@ -1,14 +1,14 @@
 import os
 from unittest import mock
 
-from jupyter_health import JupyterHealthCHClient
+from jupyter_health_client import JupyterHealthClient
 
 
 def test_client_constructor():
-    client = JupyterHealthCHClient(token="abc")
+    client = JupyterHealthClient(token="abc")
     assert client.session.headers == {"Authorization": "Bearer abc"}
-    with mock.patch.dict(os.environ, {"CHCS_TOKEN": "xyz"}):
-        client = JupyterHealthCHClient()
+    with mock.patch.dict(os.environ, {"JHE_TOKEN": "xyz"}):
+        client = JupyterHealthClient()
     assert client.session.headers == {"Authorization": "Bearer xyz"}
 
 

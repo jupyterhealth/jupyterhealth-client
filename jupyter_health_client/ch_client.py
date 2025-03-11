@@ -7,8 +7,9 @@ from __future__ import annotations
 
 import os
 import warnings
+from collections.abc import Generator
 from enum import Enum
-from typing import Any, Generator, Literal, cast, overload
+from typing import Any, Literal, cast, overload
 
 import pandas as pd
 import requests
