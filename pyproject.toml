@@ -36,7 +36,7 @@ build-backend = "hatchling.build"
 # hatch ref: https://hatch.pypa.io
 #
 [tool.hatch.version]
-path = "jupyter_health/__init__.py"
+path = "jupyterhealth_client/__init__.py"
 
 # ruff is our linter and formatter
 [tool.ruff.format]
