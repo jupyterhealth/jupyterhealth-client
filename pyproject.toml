@@ -56,7 +56,7 @@ select = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D"]
-
+"docs/*" = ["D"]
 [tool.tbump]
 # this will eventually be in its own repo
 github_url = "https://github.com/jupyterhealth/jupyterhealth-client"
