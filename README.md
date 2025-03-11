@@ -5,13 +5,13 @@ A Python client library for the JupyterHealth exchange.
 Install:
 
 ```
-pip install jupyter-health-client
+pip install jupyterhealth-client
 ```
 
 Use:
 
 ```python
-from jupyter_health_client import JupyterHealthClient
+from jupyterhealth_client import JupyterHealthClient
 
 client = JupyterHealthClient()
 ```
