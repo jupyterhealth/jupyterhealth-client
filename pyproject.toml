@@ -80,4 +80,4 @@ message_template = "Bump to {new_version}"
 tag_template = "{new_version}"
 
 [[tool.tbump.file]]
-src = "jupyter_health_client/__init__.py"
+src = "jupyterhealth_client/__init__.py"
