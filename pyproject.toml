@@ -1,6 +1,6 @@
 [project]
-name = "jupyter-health-client"
-description = "Jupyter Health client library"
+name = "jupyterhealth-client"
+description = "JupyterHealth client library"
 authors = [
     {name = "Jupyter", email = "benjaminrk@gmail.com"},
 ]
@@ -22,9 +22,9 @@ dependencies = [
 
 [project.urls]
 # this will eventually be in its own repo
-Documentation = "https://github.com/jupyterhealth/jupyter-health-client#readme"
-Issues = "https://github.com/jupyterhealth/jupyter-health-client/issues"
-Source = "https://github.com/jupyterhealth/jupyter-health-client"
+Documentation = "https://github.com/jupyterhealth/jupyterhealth-client#readme"
+Issues = "https://github.com/jupyterhealth/jupyterhealth-client/issues"
+Source = "https://github.com/jupyterhealth/jupyterhealth-client"
 
 [project.optional-dependencies]
 test = ["pytest"]
@@ -59,7 +59,7 @@ select = [
 
 [tool.tbump]
 # this will eventually be in its own repo
-github_url = "https://github.com/jupyterhealth/jupyter-health-client"
+github_url = "https://github.com/jupyterhealth/jupyterhealth-client"
 
 [tool.tbump.version]
 current = "0.0.1a1"

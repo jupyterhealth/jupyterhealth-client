@@ -15,7 +15,7 @@ import pandas as pd
 import requests
 from yarl import URL
 
-from .utils import tidy_observation
+from ._utils import tidy_observation
 
 _EXCHANGE_URL = os.environ.get("JHE_URL", "https://jhe.fly.dev")
 

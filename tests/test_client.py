@@ -1,7 +1,7 @@
 import os
 from unittest import mock
 
-from jupyter_health_client import JupyterHealthClient
+from jupyterhealth_client import JupyterHealthClient
 
 
 def test_client_constructor():
