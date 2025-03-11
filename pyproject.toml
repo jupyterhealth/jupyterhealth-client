@@ -21,8 +21,7 @@ dependencies = [
 ]
 
 [project.urls]
-# this will eventually be in its own repo
-Documentation = "https://github.com/jupyterhealth/jupyterhealth-client#readme"
+Documentation = "https://jupyterhealth-client.readthedocs.org"
 Issues = "https://github.com/jupyterhealth/jupyterhealth-client/issues"
 Source = "https://github.com/jupyterhealth/jupyterhealth-client"
 
