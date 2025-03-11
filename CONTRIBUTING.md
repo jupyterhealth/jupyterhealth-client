@@ -9,4 +9,3 @@ Make sure to also follow [Project Jupyter's Code of Conduct](https://github.com/
 for a friendly and welcoming collaborative environment.
 
 If you need some help, feel free to ask on [Zulip](https://jupyter.zulipchat.com/#narrow/channel/469744-jupyterhub/) or [Discourse](https://discourse.jupyter.org/).
-

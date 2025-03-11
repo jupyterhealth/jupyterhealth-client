@@ -1,4 +1,4 @@
-# JupyterHealth client 
+# JupyterHealth client
 
 A Python client library for the JupyterHealth exchange.
 
@@ -15,6 +15,5 @@ from jupyter_health_client import JupyterHealthClient
 
 client = JupyterHealthClient()
 ```
-
 
 For more information, see [examples](https://jupyterhealth.org/software-documentation/)
