@@ -60,7 +60,7 @@ select = [
 github_url = "https://github.com/jupyterhealth/jupyterhealth-client"
 
 [tool.tbump.version]
-current = "0.0.1a1"
+current = "0.0.1a2"
 
 regex = '''
   (?P<major>\d+)
