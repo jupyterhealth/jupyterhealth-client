@@ -40,7 +40,7 @@ tidy_glucose_record = {
         "2024-03-07 07:25:00"
     ),
     "id": "54321",
-    "meta_lastUpdated": "2024-10-09T22:10:55.193492+00:00",
+    "meta_lastUpdated": Timestamp("2024-10-09T22:10:55.193492+00:00"),
     "resourceType": "Observation",
     "resource_type": "omh:blood-glucose:4.0",
     "specimen_source": "capillary blood",
@@ -75,7 +75,7 @@ tidy_bp_record = {
     "effective_time_frame_date_time": Timestamp("2024-04-10 09:36:00+0000", tz="UTC"),
     "effective_time_frame_date_time_local": Timestamp("2024-04-10 08:36:00"),
     "id": "54322",
-    "meta_lastUpdated": "2024-10-09T17:04:36.617988+00:00",
+    "meta_lastUpdated": Timestamp("2024-10-09T17:04:36.617988+00:00"),
     "resourceType": "Observation",
     "resource_type": "omh:blood-pressure:4.0",
     "status": "final",

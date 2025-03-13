@@ -105,11 +105,15 @@ class JupyterHealthClient:
         **kwargs,
     ) -> dict[str, Any] | requests.Response | None:
         """Make an API request"""
-        if fhir:
-            url = self._url / "fhir/r5"
+        if "://" in path:
+            # full url
+            url = URL(path)
         else:
-            url = self._url / "api/v1"
-        url = url / path
+            if fhir:
+                url = self._url / "fhir/r5"
+            else:
+                url = self._url / "api/v1"
+            url = url / path
         r = self.session.request(method, str(url), **kwargs)
         if check:
             try:
@@ -130,18 +134,48 @@ class JupyterHealthClient:
         yield from r["results"]
         # TODO: handle pagination fields
 
-    def _fhir_list_api_request(self, path: str, **kwargs) -> Generator[dict[str, Any]]:
+    def _fhir_list_api_request(
+        self, path: str, *, limit=None, **kwargs
+    ) -> Generator[dict[str, Any]]:
         """Get a list from a fhir endpoint"""
         r: dict = self._api_request(path, fhir=True, **kwargs)
-        for entry in r["entry"]:
-            # entry seems to always be a dict with one key?
-            if isinstance(entry, dict) and len(entry) == 1:
-                # return entry['resource'] which is ~always the only thing
-                # in the list
-                yield list(entry.values())[0]
-            else:
+
+        records = 0
+        requests = 0
+        seen_ids = set()
+
+        while True:
+            new_records = False
+            requests += 1
+            for entry in r["entry"]:
+                # entry seems to always be a dict with one key?
+                if isinstance(entry, dict) and len(entry) == 1:
+                    # return entry['resource'] which is ~always the only thing
+                    # in the list
+                    entry = list(entry.values())[0]
+                if entry["id"] in seen_ids:
+                    # FIXME: skip duplicate records
+                    # returned by server-side pagination bugs
+                    continue
+                new_records = True
+                seen_ids.add(entry["id"])
+
                 yield entry
-        # TODO: handle pagination fields
+                records += 1
+                if limit and records >= limit:
+                    return
+
+            # paginated request
+            next_url = None
+            for link in r["link"]:
+                if link["relation"] == "next":
+                    next_url = link["url"]
+            # only proceed to the next page if this page is empty
+            if next_url and new_records:
+                kwargs.pop("params", None)
+                r = self._api_request(next_url, **kwargs)
+            else:
+                break
 
     def get_user(self) -> dict[str, Any]:
         """Get the current user"""
@@ -192,6 +226,7 @@ class JupyterHealthClient:
         patient_id: str | None = None,
         study_id: str | None = None,
         code: str | None = None,
+        limit: int | None = 2000,
     ) -> Generator[dict]:
         """Fetch observations for given patient and/or study
 
@@ -213,17 +248,21 @@ class JupyterHealthClient:
                 # no code system specified, default to openmhealth
                 code = f"https://w3id.org/openmhealth|{code}"
             params["code"] = code
-        return self._fhir_list_api_request("Observation", params=params)
+        return self._fhir_list_api_request("Observation", params=params, limit=limit)
 
     def list_observations_df(
         self,
         patient_id: str | None = None,
         study_id: str | None = None,
         code: str | None = None,
+        limit: int | None = 2000,
     ) -> pd.DataFrame:
         """Wrapper around list_observations, returns a DataFrame"""
         observations = self.list_observations(
-            patient_id=patient_id, study_id=study_id, code=code
+            patient_id=patient_id,
+            study_id=study_id,
+            code=code,
+            limit=limit,
         )
         records = [tidy_observation(obs) for obs in observations]
         return pd.DataFrame.from_records(records)

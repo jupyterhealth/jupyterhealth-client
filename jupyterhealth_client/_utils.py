@@ -90,4 +90,6 @@ def tidy_observation(observation: dict) -> dict:
             # data[_date_time_local] is local time for the measurement (without tz info)
             # used for e.g. time-of-day binning
             data[key + "_local"] = pd.to_datetime(timestamp).tz_localize(None)
+    if "meta_lastUpdated" in data:
+        data["meta_lastUpdated"] = pd.to_datetime(data["meta_lastUpdated"], utc=True)
     return data

@@ -39,7 +39,6 @@ path = "jupyterhealth_client/__init__.py"
 
 # ruff is our linter and formatter
 [tool.ruff.format]
-quote-style = "preserve"
 
 [tool.ruff.lint]
 ignore = [
