@@ -13,9 +13,9 @@ import jupyterhealth_client
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'JupyterHealth Client'
-copyright = '2025, Project Jupyter Contributors'
-author = 'Project Jupyter Contributors'
+project = "JupyterHealth Client"
+copyright = "2025, Project Jupyter Contributors"
+author = "Project Jupyter Contributors"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -38,7 +38,7 @@ source_suffix = [".md"]
 # default_role let's use use `foo` instead of ``foo`` in rST
 default_role = "literal"
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- MyST configuration ------------------------------------------------------
