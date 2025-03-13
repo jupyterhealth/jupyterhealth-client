@@ -134,10 +134,15 @@ class JupyterHealthClient:
         yield from r["results"]
         # TODO: handle pagination fields
 
-    def _fhir_list_api_request(self, path: str, **kwargs) -> Generator[dict[str, Any]]:
+    def _fhir_list_api_request(
+        self, path: str, *, limit=None, **kwargs
+    ) -> Generator[dict[str, Any]]:
         """Get a list from a fhir endpoint"""
         r: dict | None = self._api_request(path, fhir=True, **kwargs)
+        records = 0
+        requests = 0
         while r:
+            requests += 1
             for entry in r["entry"]:
                 # entry seems to always be a dict with one key?
                 if isinstance(entry, dict) and len(entry) == 1:
@@ -146,6 +151,10 @@ class JupyterHealthClient:
                     yield list(entry.values())[0]
                 else:
                     yield entry
+                records += 1
+                if limit and records >= limit:
+                    return
+            print(f"{requests=}, {records=}")
             # paginated request
             next_url = None
             for link in r["link"]:
@@ -204,6 +213,7 @@ class JupyterHealthClient:
         patient_id: str | None = None,
         study_id: str | None = None,
         code: str | None = None,
+        limit: int | None = 2000,
     ) -> Generator[dict]:
         """Fetch observations for given patient and/or study
 
@@ -225,17 +235,21 @@ class JupyterHealthClient:
                 # no code system specified, default to openmhealth
                 code = f"https://w3id.org/openmhealth|{code}"
             params["code"] = code
-        return self._fhir_list_api_request("Observation", params=params)
+        return self._fhir_list_api_request("Observation", params=params, limit=limit)
 
     def list_observations_df(
         self,
         patient_id: str | None = None,
         study_id: str | None = None,
         code: str | None = None,
+        limit: int | None = 2000,
     ) -> pd.DataFrame:
         """Wrapper around list_observations, returns a DataFrame"""
         observations = self.list_observations(
-            patient_id=patient_id, study_id=study_id, code=code
+            patient_id=patient_id,
+            study_id=study_id,
+            code=code,
+            limit=limit,
         )
         records = [tidy_observation(obs) for obs in observations]
         return pd.DataFrame.from_records(records)
