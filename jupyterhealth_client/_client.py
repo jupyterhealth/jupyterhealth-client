@@ -144,7 +144,7 @@ class JupyterHealthClient:
         # track
         seen_ids = set()
 
-        while r:
+        while True:
             new_records = False
             requests += 1
             for entry in r["entry"]:
@@ -173,6 +173,8 @@ class JupyterHealthClient:
             if next_url and new_records:
                 kwargs.pop("params", None)
                 r = self._api_request(next_url, **kwargs)
+            else:
+                break
 
     def get_user(self) -> dict[str, Any]:
         """Get the current user"""
