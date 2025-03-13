@@ -167,7 +167,7 @@ class JupyterHealthClient:
 
             # paginated request
             next_url = None
-            for link in r["link"]:
+            for link in r.get("link") or []:
                 if link["relation"] == "next":
                     next_url = link["url"]
             # only proceed to the next page if this page is empty
