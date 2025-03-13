@@ -141,16 +141,26 @@ class JupyterHealthClient:
         r: dict | None = self._api_request(path, fhir=True, **kwargs)
         records = 0
         requests = 0
+        # track
+        seen_ids = set()
+
         while r:
+            new_records = False
             requests += 1
             for entry in r["entry"]:
                 # entry seems to always be a dict with one key?
                 if isinstance(entry, dict) and len(entry) == 1:
                     # return entry['resource'] which is ~always the only thing
                     # in the list
-                    yield list(entry.values())[0]
-                else:
-                    yield entry
+                    entry = list(entry.values())[0]
+                if entry["id"] in seen_ids:
+                    # FIXME: skip duplicate records
+                    # returned by server-side pagination bugs
+                    continue
+                new_records = True
+                seen_ids.add(entry["id"])
+
+                yield entry
                 records += 1
                 if limit and records >= limit:
                     return
@@ -160,7 +170,7 @@ class JupyterHealthClient:
             for link in r["link"]:
                 if link["relation"] == "next":
                     next_url = link["url"]
-            if next_url:
+            if next_url and new_records:
                 kwargs.pop("params", None)
                 r = self._api_request(next_url, **kwargs)
 
