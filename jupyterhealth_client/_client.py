@@ -139,9 +139,9 @@ class JupyterHealthClient:
     ) -> Generator[dict[str, Any]]:
         """Get a list from a fhir endpoint"""
         r: dict | None = self._api_request(path, fhir=True, **kwargs)
+
         records = 0
         requests = 0
-        # track
         seen_ids = set()
 
         while True:
@@ -164,12 +164,13 @@ class JupyterHealthClient:
                 records += 1
                 if limit and records >= limit:
                     return
-            print(f"{requests=}, {records=}")
+
             # paginated request
             next_url = None
             for link in r["link"]:
                 if link["relation"] == "next":
                     next_url = link["url"]
+            # only proceed to the next page if this page is empty
             if next_url and new_records:
                 kwargs.pop("params", None)
                 r = self._api_request(next_url, **kwargs)
