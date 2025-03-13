@@ -96,7 +96,7 @@ class JupyterHealthClient:
 
     def _api_request(
         self,
-        path: str,
+        path: str | URL,
         *,
         method: str = "GET",
         check=True,
@@ -105,11 +105,15 @@ class JupyterHealthClient:
         **kwargs,
     ) -> dict[str, Any] | requests.Response | None:
         """Make an API request"""
-        if fhir:
-            url = self._url / "fhir/r5"
+        if "://" in path:
+            # full url
+            url = path
         else:
-            url = self._url / "api/v1"
-        url = url / path
+            if fhir:
+                url = self._url / "fhir/r5"
+            else:
+                url = self._url / "api/v1"
+            url = url / path
         r = self.session.request(method, str(url), **kwargs)
         if check:
             try:
@@ -132,16 +136,24 @@ class JupyterHealthClient:
 
     def _fhir_list_api_request(self, path: str, **kwargs) -> Generator[dict[str, Any]]:
         """Get a list from a fhir endpoint"""
-        r: dict = self._api_request(path, fhir=True, **kwargs)
-        for entry in r["entry"]:
-            # entry seems to always be a dict with one key?
-            if isinstance(entry, dict) and len(entry) == 1:
-                # return entry['resource'] which is ~always the only thing
-                # in the list
-                yield list(entry.values())[0]
-            else:
-                yield entry
-        # TODO: handle pagination fields
+        r: dict | None = self._api_request(path, fhir=True, **kwargs)
+        while r:
+            for entry in r["entry"]:
+                # entry seems to always be a dict with one key?
+                if isinstance(entry, dict) and len(entry) == 1:
+                    # return entry['resource'] which is ~always the only thing
+                    # in the list
+                    yield list(entry.values())[0]
+                else:
+                    yield entry
+            # paginated request
+            next_url = None
+            for link in r["link"]:
+                if link["relation"] == "next":
+                    next_url = link["url"]
+            if next_url:
+                kwargs.pop("params", None)
+                r = self._api_request(next_url, **kwargs)
 
     def get_user(self) -> dict[str, Any]:
         """Get the current user"""
