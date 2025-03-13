@@ -96,7 +96,7 @@ class JupyterHealthClient:
 
     def _api_request(
         self,
-        path: str | URL,
+        path: str,
         *,
         method: str = "GET",
         check=True,
@@ -107,7 +107,7 @@ class JupyterHealthClient:
         """Make an API request"""
         if "://" in path:
             # full url
-            url = path
+            url = URL(path)
         else:
             if fhir:
                 url = self._url / "fhir/r5"
@@ -138,7 +138,7 @@ class JupyterHealthClient:
         self, path: str, *, limit=None, **kwargs
     ) -> Generator[dict[str, Any]]:
         """Get a list from a fhir endpoint"""
-        r: dict | None = self._api_request(path, fhir=True, **kwargs)
+        r: dict = self._api_request(path, fhir=True, **kwargs)
 
         records = 0
         requests = 0
