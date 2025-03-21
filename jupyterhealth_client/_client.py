@@ -17,7 +17,8 @@ from yarl import URL
 
 from ._utils import tidy_observation
 
-_EXCHANGE_URL = os.environ.get("JHE_URL", "https://jhe.fly.dev")
+_ENV_URL_PLACEHOLDER = "$JHE_URL"
+_EXCHANGE_URL = os.environ.get("JHE_URL", _ENV_URL_PLACEHOLDER)
 
 
 class Code(Enum):
@@ -70,6 +71,8 @@ class JupyterHealthClient:
 
         By default, creates a client connected to the MVP application.
         """
+        if url == _EXCHANGE_URL == _ENV_URL_PLACEHOLDER:
+            raise ValueError("When $JHE_URL not defined, `url` argument is required")
         if token is None:
             token = os.environ.get("JHE_TOKEN", None)
             if token is None:
