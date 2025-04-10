@@ -17,7 +17,8 @@ from yarl import URL
 
 from ._utils import tidy_observation
 
-_EXCHANGE_URL = os.environ.get("JHE_URL", "https://jhe.fly.dev")
+_ENV_URL_PLACEHOLDER = "$JHE_URL"
+_EXCHANGE_URL = os.environ.get("JHE_URL", _ENV_URL_PLACEHOLDER)
 
 
 class Code(Enum):
@@ -70,6 +71,8 @@ class JupyterHealthClient:
 
         By default, creates a client connected to the MVP application.
         """
+        if url == _EXCHANGE_URL == _ENV_URL_PLACEHOLDER:
+            raise ValueError("When $JHE_URL not defined, `url` argument is required")
         if token is None:
             token = os.environ.get("JHE_TOKEN", None)
             if token is None:
@@ -184,6 +187,18 @@ class JupyterHealthClient:
     def get_patient(self, id: int) -> dict[str, Any]:
         """Get a single patient by id"""
         return cast(dict[str, Any], self._api_request(f"patients/{id}"))
+
+    def get_patient_by_external_id(self, external_id: str) -> dict[str, Any]:
+        """Get a single patient by external id
+
+        For looking up the JHE Patient record by an external (e.g. EHR) patient id.
+        """
+
+        # TODO: this should be a single lookup, but no API in JHE yet
+        for patient in self.list_patients():
+            if patient["identifier"] == external_id:
+                return patient
+        raise KeyError(f"No patient found with external identifier: {external_id!r}")
 
     def list_patients(self) -> Generator[dict[str, dict[str, Any]]]:
         """Return iterator of patients
