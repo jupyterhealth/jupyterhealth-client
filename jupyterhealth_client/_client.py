@@ -188,6 +188,18 @@ class JupyterHealthClient:
         """Get a single patient by id"""
         return cast(dict[str, Any], self._api_request(f"patients/{id}"))
 
+    def get_patient_by_external_id(self, external_id: str) -> dict[str, Any]:
+        """Get a single patient by external id
+
+        For looking up the JHE Patient record by an external (e.g. EHR) patient id.
+        """
+
+        # TODO: this should be a single lookup, but no API in JHE yet
+        for patient in self.list_patients():
+            if patient["identifier"] == external_id:
+                return patient
+        raise KeyError(f"No patient found with external identifier: {external_id!r}")
+
     def list_patients(self) -> Generator[dict[str, dict[str, Any]]]:
         """Return iterator of patients
 
