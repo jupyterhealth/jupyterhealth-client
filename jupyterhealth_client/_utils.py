@@ -42,12 +42,60 @@ def flatten_dict(d: dict | list, prefix: str = "") -> dict:
 
 
 def tidy_observation(observation: dict) -> dict:
-    """Given a CHCS Observation, return a flat dictionary
+    """
+    Given an Observation from JupyterHealth (as returned by :meth:`.list_observations`),
+    return a flat dictionary.
 
-    reshapes data to a one-level dictionary, appropriate for
-    `pandas.from_records`.
+    Expands the base64 `valueAttachment` and
+    reshapes data to a one-level dictionary,
+    appropriate for `pandas.from_records`.
+    Nested keys are joined with `_`, so::
 
-    any fields ending with 'date_time' are parsed as timestamps
+        {"a": {"b": 5}}
+
+    becomes::
+
+        {"a_b": 5}
+
+    any fields ending with 'date_time' are parsed as timestamps.
+    To avoid problems with plotting libraries, all `date_time` fields are presented in UTC,
+    and a separate `_date_time_local` field is the local timestamp in the observed timezone
+    with timezone info removed.
+
+    Example output::
+
+        {
+            "code": "omh:blood-glucose:4.0",
+            "resourceType": "Observation",
+            "id": 64914,
+            "meta_lastUpdated": Timestamp("2025-03-12 16:00:50.952478+0000", tz="UTC"),
+            "identifier_0_value": "u-u-i-d-4",
+            "identifier_0_system": "https://commonhealth.org",
+            "status": "final",
+            "subject_reference": "Patient/46007",
+            "code_coding_0_code": "omh:blood-glucose:4.0",
+            "code_coding_0_system": "https://w3id.org/openmhealth",
+            "uuid": "u-u-i-d-5",
+            "modality": "self-reported",
+            "schema_id_name": "blood-glucose",
+            "schema_id_version": "3.1",
+            "schema_id_namespace": "omh",
+            "creation_date_time": Timestamp("2025-03-12 15:47:30.510000+0000", tz="UTC"),
+            "external_datasheets_0_datasheet_type": "manufacturer",
+            "external_datasheets_0_datasheet_reference": "Health Connect",
+            "source_data_point_id": "u-u-i-d-6",
+            "source_creation_date_time": Timestamp("2025-02-15 17:28:33.271000+0000", tz="UTC"),
+            "blood_glucose_unit": "MGDL",
+            "blood_glucose_value": 97,
+            "effective_time_frame_date_time": Timestamp(
+                "2025-02-15 17:28:33.271000+0000", tz="UTC"
+            ),
+            "temporal_relationship_to_meal": "unknown",
+            "creation_date_time_local": Timestamp("2025-03-12 15:47:30.510000"),
+            "source_creation_date_time_local": Timestamp("2025-02-15 17:28:33.271000"),
+            "effective_time_frame_date_time_local": Timestamp("2025-02-15 17:28:33.271000"),
+        }
+
     """
     id = observation["id"]
     attachment = observation["valueAttachment"]
@@ -69,7 +117,9 @@ def tidy_observation(observation: dict) -> dict:
     # todo: handle more than one?
     coding = observation["code"]["coding"][0]
     data = {
+        # deprecate 'resource_type', it's confusing with resourceType which is totally different
         "resource_type": coding["code"],
+        "code": coding["code"],
     }
     top_level_dict = {
         key: value

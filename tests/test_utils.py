@@ -24,6 +24,7 @@ glucose_record = {
 tidy_glucose_record = {
     "blood_glucose_unit": "mg/dL",
     "blood_glucose_value": 65,
+    "code": "omh:blood-glucose:4.0",
     "code_coding_0_code": "omh:blood-glucose:4.0",
     "code_coding_0_system": "https://w3id.org/openmhealth",
     "descriptive_statistic": "minimum",
@@ -68,6 +69,7 @@ bp_record = {
 }
 
 tidy_bp_record = {
+    "code": "omh:blood-pressure:4.0",
     "code_coding_0_code": "omh:blood-pressure:4.0",
     "code_coding_0_system": "https://w3id.org/openmhealth",
     "diastolic_blood_pressure_unit": "mmHg",
