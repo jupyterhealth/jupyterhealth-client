@@ -16,4 +16,4 @@ from jupyterhealth_client import JupyterHealthClient
 client = JupyterHealthClient()
 ```
 
-For more information, see [examples](https://jupyterhealth.org/software-documentation/)
+For more information on the client API, see [the docs](https://jupyterhealth-client.readthedocs.io/).
