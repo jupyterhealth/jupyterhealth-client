@@ -37,5 +37,6 @@ For more information, see [examples](https://jupyterhealth.org/software-document
    :maxdepth: 2
    :caption: Contents:
 
+   getting-started
    api
 ```

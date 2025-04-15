@@ -17,6 +17,12 @@ repos:
           - python
           - jupyter
 
+  # strip output because notebook outputs are not shareable
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+
   # Autoformat: yaml
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
     rev: v2.14.0
