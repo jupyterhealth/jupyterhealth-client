@@ -70,6 +70,8 @@ class JupyterHealthClient:
     Client for JupyterHealth data Exchange
     """
 
+    _default_page_size = 1000
+
     def __init__(
         self,
         url: str = _EXCHANGE_URL,
@@ -152,6 +154,7 @@ class JupyterHealthClient:
         self, path: str, *, limit=None, **kwargs
     ) -> Generator[dict[str, Any]]:
         """Get a list from a fhir endpoint"""
+        kwargs.setdefault("params", {}).setdefault("_count", self._default_page_size)
         r: dict = self._api_request(path, fhir=True, **kwargs)
 
         records = 0
@@ -176,11 +179,8 @@ class JupyterHealthClient:
                     return
 
             # paginated request
-            next_url = None
-            for link in r.get("link") or []:
-                if link["relation"] == "next":
-                    next_url = link["url"]
-            # only proceed to the next page if this page is empty
+            next_url = r.get("next")
+            # only proceed to the next page if this page is not empty
             if next_url and new_records:
                 kwargs.pop("params", None)
                 r = self._api_request(next_url, **kwargs)
