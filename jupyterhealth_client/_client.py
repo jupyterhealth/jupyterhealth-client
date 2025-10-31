@@ -159,7 +159,7 @@ class JupyterHealthClient:
         while True:
             new_records = False
             requests += 1
-            for entry in r["entry"]:
+            for entry in r:
                 # entry seems to always be a dict with one key?
                 if isinstance(entry, dict) and len(entry) == 1:
                     # return entry['resource'] which is ~always the only thing
