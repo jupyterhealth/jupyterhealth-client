@@ -31,6 +31,8 @@ class Code(Enum):
     BLOOD_PRESSURE = "omh:blood-pressure:4.0"
     BLOOD_GLUCOSE = "omh:blood-glucose:4.0"
     HEART_RATE = "omh:heart-rate:2.0"
+    SLEEP_STAGE_SUMMARY = "ieee:sleep-stage-summary:1.0"
+    FOOD_ENTRY = "ieee:food-entry:0.1"
 
 
 class RequestError(requests.HTTPError):
