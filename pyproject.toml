@@ -27,7 +27,11 @@ Issues = "https://github.com/jupyterhealth/jupyterhealth-client/issues"
 Source = "https://github.com/jupyterhealth/jupyterhealth-client"
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = [
+  "pytest",
+  "pytest-cov",
+  "responses",
+]
 
 [build-system]
 requires = ["hatchling"]
