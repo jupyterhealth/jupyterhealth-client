@@ -11,9 +11,10 @@ classifiers = [
     "Framework :: Jupyter",
 ]
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 dynamic = ["version"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "pandas",
     "requests",
