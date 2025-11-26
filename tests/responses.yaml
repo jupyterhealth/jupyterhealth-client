@@ -1,0 +1,192 @@
+# mocked responses
+# optional:
+#  - method (default: GET)
+#  - status (default: 200)
+# required:
+#  - url
+#  - body OR json
+  - method: GET
+    url: /api/v1/users/profile
+    status: 200
+    json:
+      id: 10008
+      email: fake@email.com
+      firstName: first
+      lastName: last
+      patient:
+      userType: practitioner
+      isSuperUser: false
+  - url: /api/v1/organizations/20013
+    json:
+      children: []
+      currentUserRole: manager
+      id: 20013
+      name: Department
+      partOf: 20011
+      type: edu
+  - url: /api/v1/organizations/404
+    status: 404
+  - url: /api/v1/organizations
+    json:
+      count: 4
+      next:
+      previous:
+      results:
+        - children: []
+          currentUserRole: manager
+          id: 20013
+          name: Department
+          partOf: 20011
+          type: edu
+        - children: []
+          currentUserRole:
+          id: 0
+          name: ROOT
+          partOf:
+          type: root
+        - children: []
+          currentUserRole:
+          id: 20011
+          name: University A
+          partOf: 0
+          type: edu
+        - children: []
+          currentUserRole:
+          id: 20001
+          name: University B
+          partOf: 0
+          type: edu
+
+          count: 8
+  - url: /api/v1/studies
+    json:
+      count: 2
+      next:
+      previous:
+      results:
+        - description: Study description
+          iconUrl:
+          id: 30001
+          name: ACME Health CGM Study
+          organization:
+            id: 20013
+            name: Department
+            type: edu
+        - description: Another study
+          iconUrl:
+          id: 30012
+          name: Study 2
+          organization:
+            id: 20001
+            name: University B
+            type: edu
+  - url: /api/v1/studies?organization_id=20013
+    json:
+      count: 1
+      next:
+      previous:
+      results:
+        - description: Study description
+          iconUrl:
+          id: 30001
+          name: ACME Health CGM Study
+          organization:
+            id: 20013
+            name: Department
+            type: edu
+  - url: /api/v1/studies/30001
+    json:
+      description: Study description
+      iconUrl:
+      id: 30001
+      name: ACME Health CGM Study
+      organization:
+        id: 20013
+        name: Department
+        type: edu
+  - url: /api/v1/studies/404
+    status: 404
+  - url: /api/v1/studies?organization_id=404
+    json:
+      count: 0
+      next:
+      previous:
+      results: []
+  - url: /api/v1/patients
+    json:
+      count: 2
+      next:
+      previous:
+      results:
+        - birthDate: '1955-01-01'
+          id: 40001
+          identifier: demouser-min
+          jheUserId: 10007
+          nameFamily: Patient
+          nameGiven: Demo
+          organizations:
+            - children: []
+              currentUserRole:
+              id: 20013
+              name: Department
+              partOf: 20011
+              type: edu
+          telecomEmail: demouser@jupyterhealth.example.org
+          telecomPhone:
+        - birthDate: '1980-01-01'
+          id: 40002
+          identifier: demouser-simon
+          jheUserId: 10011
+          nameFamily: Patient
+          nameGiven: Simon
+          organizations:
+            - children: []
+              currentUserRole:
+              id: 20013
+              name: Department
+              partOf: 20011
+              type: edu
+          telecomEmail: simondemo@example.com
+          telecomPhone:
+  - url: /api/v1/patients/40001
+    json:
+      birthDate: '1955-01-01'
+      id: 40001
+      identifier: demouser-min
+      jheUserId: 10007
+      nameFamily: Patient
+      nameGiven: Demo
+      organizations:
+        - children: []
+          currentUserRole:
+          id: 20013
+          name: Department
+          partOf: 20011
+          type: edu
+      telecomEmail: demouser@jupyterhealth.example.org
+      telecomPhone:
+  - url: /api/v1/patients/404
+    status: 404
+    json:
+      detail: No patient matches the given query
+  - url: /api/v1/patients/global_lookup?email=demouser%40jupyterhealth.example.org
+    json:
+      - id: 40001
+        identifier: demouser-min
+        jheUserId: 10007
+  - url: /api/v1/patients/global_lookup?email=nosuchuser%40jupyterhealth.example.org
+    json: []
+  - url: /api/v1/data_sources
+    json:
+      count: 2
+      next:
+      previous:
+      results:
+        - id: 70002
+          name: Another Device
+          supportedScopes: []
+          type: personal_device
+        - id: 70001
+          name: Some Device
+          supportedScopes: []
+          type: personal_device

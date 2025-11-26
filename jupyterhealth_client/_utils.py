@@ -33,7 +33,7 @@ def flatten_dict(d: dict | list, prefix: str = "") -> dict:
         if prefix:
             key = f"{prefix}_{key}"
 
-        if isinstance(value, (dict, list)):
+        if isinstance(value, dict | list):
             for sub_key, sub_value in flatten_dict(value, prefix=key).items():
                 flat_dict[sub_key] = sub_value
         else:

@@ -220,24 +220,61 @@ class JupyterHealthClient:
         patient = cast(dict[str, Any], self._api_request(f"patients/{id}"))
         return patient
 
+    def lookup_patient(
+        self, *, email: str | None = None, external_id: str | None = None
+    ) -> dict[str, Any] | None:
+        """Lookup a patient by email or external id.
+
+        Raises KeyError if no patient is found, otherwise returns patient record.
+        """
+        if email is None and external_id is None:
+            raise TypeError(
+                "Specify one of `email` or `external_id` to lookup a patient"
+            )
+        if email:
+            for patient in self._api_request(
+                "patients/global_lookup", params={"email": email}
+            ):
+                return patient
+            raise KeyError(
+                f"No patient found with external identifier: {external_id!r}"
+            )
+        elif external_id:
+            # TODO: this should be a single lookup, but no API in JHE yet
+            for patient in self.list_patients():
+                if patient["identifier"] == external_id:
+                    return patient
+            raise KeyError(
+                f"No patient found with external identifier: {external_id!r}"
+            )
+
     def get_patient_by_external_id(self, external_id: str) -> dict[str, Any]:
         """Get a single patient by external id.
 
         For looking up the JHE Patient record by an external (e.g. EHR) patient id.
         """
+        warnings.warn(
+            f"get_patient_by_external_id is deprecated, use lookup_patient(external_id={external_id!r})",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.lookup_patient(external_id=external_id)
 
-        # TODO: this should be a single lookup, but no API in JHE yet
-        for patient in self.list_patients():
-            if patient["identifier"] == external_id:
-                return patient
-        raise KeyError(f"No patient found with external identifier: {external_id!r}")
-
-    def list_patients(self) -> Generator[dict[str, dict[str, Any]]]:
+    def list_patients(
+        self, organization_id: int | None = None, study_id: int | None = None
+    ) -> Generator[dict[str, dict[str, Any]]]:
         """Iterate over all patients.
+
+        Optionally filter by organization or study id.
 
         Patient ids are the keys that may be passed to e.g. :meth:`list_observations`.
         """
-        yield from self._list_api_request("patients")
+        params = {}
+        if organization_id is not None:
+            params["organization_id"] = organization_id
+        if study_id is not None:
+            params["study_id"] = study_id
+        yield from self._list_api_request("patients", params=params)
 
     def get_patient_consents(self, patient_id: int) -> dict[str, Any]:
         """Return patient consent status.
@@ -330,12 +367,17 @@ class JupyterHealthClient:
         """
         return cast(dict[str, Any], self._api_request(f"studies/{id}"))
 
-    def list_studies(self) -> Generator[dict[str, dict[str, Any]]]:
+    def list_studies(
+        self, *, organization_id: int | None = None
+    ) -> Generator[dict[str, dict[str, Any]]]:
         """Iterate over studies.
 
         Only returns studies I have access to (i.e. owned by my organization(s)).
         """
-        return self._list_api_request("studies")
+        params = {}
+        if organization_id is not None:
+            params["organization_id"] = organization_id
+        return self._list_api_request("studies", params=params)
 
     def get_organization(self, id: int) -> dict[str, Any]:
         """Get a single organization by id.
@@ -365,6 +407,10 @@ class JupyterHealthClient:
         The ROOT organization has `id=0`.
         """
         return self._list_api_request("organizations")
+
+    def list_data_sources(self) -> Generator[dict[str, dict[str, Any]]]:
+        """List all registered data sources"""
+        return self._list_api_request("data_sources")
 
     def list_observations(
         self,
