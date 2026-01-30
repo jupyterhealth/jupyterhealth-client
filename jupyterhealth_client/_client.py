@@ -91,11 +91,12 @@ class JupyterHealthClient:
             token = os.environ.get("JHE_TOKEN", None)
             if token is None:
                 token = os.environ.get("CHCS_TOKEN", None)
-                warnings.warn(
-                    "$CHCS_TOKEN env is deprecated, use $JHE_TOKEN",
-                    DeprecationWarning,
-                    stacklevel=2,
-                )
+                if token:
+                    warnings.warn(
+                        "$CHCS_TOKEN env is deprecated, use $JHE_TOKEN",
+                        DeprecationWarning,
+                        stacklevel=2,
+                    )
         self._url = URL(url)
         self.session = requests.Session()
         self.session.headers = {"Authorization": f"Bearer {token}"}
