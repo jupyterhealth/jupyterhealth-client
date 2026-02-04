@@ -89,14 +89,10 @@ class JupyterHealthClient:
             raise ValueError("When $JHE_URL not defined, `url` argument is required")
         if token is None:
             token = os.environ.get("JHE_TOKEN", None)
-            if token is None:
-                token = os.environ.get("CHCS_TOKEN", None)
-                if token:
-                    warnings.warn(
-                        "$CHCS_TOKEN env is deprecated, use $JHE_TOKEN",
-                        DeprecationWarning,
-                        stacklevel=2,
-                    )
+        if token is None:
+            raise ValueError(
+                "Set $JHE_TOKEN environment variable or pass via `token=` argument"
+            )
         self._url = URL(url)
         self.session = requests.Session()
         self.session.headers = {"Authorization": f"Bearer {token}"}
