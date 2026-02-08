@@ -147,6 +147,14 @@ class JupyterHealthClient:
         yield from r["results"]
         # TODO: handle pagination fields
 
+    @staticmethod
+    def _get_link(bundle, rel):
+        """Get link from FHIR link list"""
+        for link in bundle["link"]:
+            if link["relation"] == rel:
+                return link["url"]
+        return None
+
     def _fhir_list_api_request(
         self, path: str, *, limit=None, **kwargs
     ) -> Generator[dict[str, Any]]:
@@ -161,7 +169,7 @@ class JupyterHealthClient:
         while True:
             new_records = False
             requests += 1
-            for result in r["results"]:
+            for result in r["entry"]:
                 entry = result["resource"]
                 if entry["id"] in seen_ids:
                     # FIXME: skip duplicate records
@@ -176,7 +184,7 @@ class JupyterHealthClient:
                     return
 
             # paginated request
-            next_url = r.get("next")
+            next_url = self._get_link(r, "next")
             # only proceed to the next page if this page is not empty
             if next_url and new_records:
                 kwargs.pop("params", None)
@@ -477,7 +485,7 @@ class JupyterHealthClient:
             raise ValueError("Must specify at least one of patient_id or study_id")
         params: dict[str, str | int] = {}
         if study_id:
-            params["_has:Group:member:_id"] = study_id
+            params["patient._has:Group:member:_id"] = study_id
         if patient_id:
             params["patient"] = patient_id
         if code:
