@@ -48,7 +48,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest --cov jupyterhealth_client tests
+          python3 -m pytest --cov=jupyterhealth_client tests
 
       - name: upload coverage
         uses: codecov/codecov-action@v5
