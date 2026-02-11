@@ -525,15 +525,3 @@ class JupyterHealthClient:
         )
         records = [tidy_observation(obs) for obs in observations]
         return pd.DataFrame.from_records(records)
-
-
-class JupyterHealthCHClient(JupyterHealthClient):
-    """Deprecated name for JupyterHealthClient"""
-
-    def __init__(self, *args, **kwargs):
-        warnings.warn(
-            "JupyterHealthCHClient is deprecated. Use JupyterHealthClient",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        super().__init__(*args, **kwargs)
