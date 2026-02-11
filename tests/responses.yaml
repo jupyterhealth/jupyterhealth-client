@@ -190,3 +190,96 @@
           name: Some Device
           supportedScopes: []
           type: personal_device
+  - url: /fhir/r5/Observation?_count=2&patient=40018
+    json:
+      entry:
+        - resource:
+            code:
+              coding:
+                - code: omh:heart-rate:2.0
+                  system: https://w3id.org/openmhealth
+            id: '60061'
+            meta:
+              lastUpdated: '2026-02-11T22:39:09.246655+00:00'
+            resourceType: Observation
+            status: final
+            subject:
+              reference: Patient/40018
+            valueAttachment:
+              contentType: application/json
+              data: |-
+                eyJib2R5IjogeyJoZWFydF9yYXRlIjogeyJ1bml0IjogImJlYXRzL21pbiIsICJ2YWx1ZSI6IDY3
+                LjV9LCAiZWZmZWN0aXZlX3RpbWVfZnJhbWUiOiB7ImRhdGVfdGltZSI6ICIyMDI2LTAyLTExVDIz
+                OjM5OjA5KzAwOjAwIn19LCAiaGVhZGVyIjogeyJ1dWlkIjogIjc1MGFiOWQ0LTA2ZDUtNGM4NC1i
+                ZjVmLTFiOGUwZWIxOWYxNyIsICJtb2RhbGl0eSI6ICJzZW5zZWQiLCAic2NoZW1hX2lkIjogeyJu
+                YW1lIjogImhlYXJ0LXJhdGUiLCAidmVyc2lvbiI6ICIyLjAiLCAibmFtZXNwYWNlIjogIm9taCJ9
+                LCAiZXh0ZXJuYWxfZGF0YXNoZWV0cyI6IFt7ImRhdGFzaGVldF90eXBlIjogIm1hbnVmYWN0dXJl
+                ciIsICJkYXRhc2hlZXRfcmVmZXJlbmNlIjogImlIZWFsdGgifV0sICJzb3VyY2VfY3JlYXRpb25f
+                ZGF0ZV90aW1lIjogIjIwMjYtMDItMTFUMjI6Mzk6MDkrMDA6MDAifX0=
+        - resource:
+            code:
+              coding:
+                - code: omh:heart-rate:2.0
+                  system: https://w3id.org/openmhealth
+            id: '60060'
+            meta:
+              lastUpdated: '2026-02-11T22:39:09.246651+00:00'
+            resourceType: Observation
+            status: final
+            subject:
+              reference: Patient/40018
+            valueAttachment:
+              contentType: application/json
+              data: |-
+                eyJib2R5IjogeyJoZWFydF9yYXRlIjogeyJ1bml0IjogImJlYXRzL21pbiIsICJ2YWx1ZSI6IDY3
+                LjV9LCAiZWZmZWN0aXZlX3RpbWVfZnJhbWUiOiB7ImRhdGVfdGltZSI6ICIyMDI2LTAyLTExVDIz
+                OjM5OjA5KzAwOjAwIn19LCAiaGVhZGVyIjogeyJ1dWlkIjogIjQzNzhiM2JmLTdhMWYtNGQ1Mi1h
+                MDYxLTM1M2Q1MmNiMjZhNSIsICJtb2RhbGl0eSI6ICJzZW5zZWQiLCAic2NoZW1hX2lkIjogeyJu
+                YW1lIjogImhlYXJ0LXJhdGUiLCAidmVyc2lvbiI6ICIyLjAiLCAibmFtZXNwYWNlIjogIm9taCJ9
+                LCAiZXh0ZXJuYWxfZGF0YXNoZWV0cyI6IFt7ImRhdGFzaGVldF90eXBlIjogIm1hbnVmYWN0dXJl
+                ciIsICJkYXRhc2hlZXRfcmVmZXJlbmNlIjogImlIZWFsdGgifV0sICJzb3VyY2VfY3JlYXRpb25f
+                ZGF0ZV90aW1lIjogIjIwMjYtMDItMTFUMjI6Mzk6MDkrMDA6MDAifX0=
+      link:
+        - relation: self
+          url: https://jhe.local/fhir/r5/Observation?_count=2&patient=40018
+        - relation: next
+          url: https://jhe.local/fhir/r5/Observation?_count=2&_page=2&patient=40018
+      meta: {}
+      resourceType: Bundle
+      total: 3
+      type: searchset
+  - url: /fhir/r5/Observation?_count=2&patient=40018&_page=2
+    json:
+      entry:
+        - resource:
+            code:
+              coding:
+                - code: omh:heart-rate:2.0
+                  system: https://w3id.org/openmhealth
+            id: '60059'
+            meta:
+              lastUpdated: '2026-02-11T22:39:09.246643+00:00'
+            resourceType: Observation
+            status: final
+            subject:
+              reference: Patient/40018
+            valueAttachment:
+              contentType: application/json
+              data: |-
+                eyJib2R5IjogeyJoZWFydF9yYXRlIjogeyJ1bml0IjogImJlYXRzL21pbiIsICJ2YWx1ZSI6IDY3
+                LjV9LCAiZWZmZWN0aXZlX3RpbWVfZnJhbWUiOiB7ImRhdGVfdGltZSI6ICIyMDI2LTAyLTExVDIz
+                OjM5OjA5KzAwOjAwIn19LCAiaGVhZGVyIjogeyJ1dWlkIjogImIzZmJhZjlkLTQzMDItNGE1Mi04
+                ZDE5LTE1YmYzZjgzOTE0MiIsICJtb2RhbGl0eSI6ICJzZW5zZWQiLCAic2NoZW1hX2lkIjogeyJu
+                YW1lIjogImhlYXJ0LXJhdGUiLCAidmVyc2lvbiI6ICIyLjAiLCAibmFtZXNwYWNlIjogIm9taCJ9
+                LCAiZXh0ZXJuYWxfZGF0YXNoZWV0cyI6IFt7ImRhdGFzaGVldF90eXBlIjogIm1hbnVmYWN0dXJl
+                ciIsICJkYXRhc2hlZXRfcmVmZXJlbmNlIjogImlIZWFsdGgifV0sICJzb3VyY2VfY3JlYXRpb25f
+                ZGF0ZV90aW1lIjogIjIwMjYtMDItMTFUMjI6Mzk6MDkrMDA6MDAifX0=
+      link:
+        - relation: self
+          url: https://jhe.local/fhir/r5/Observation?_count=2&patient=40018&_page=2
+        - relation: previous
+          url: https://jhe.local/fhir/r5/Observation?_count=2&patient=40018
+      meta: {}
+      resourceType: Bundle
+      total: 3
+      type: searchset
