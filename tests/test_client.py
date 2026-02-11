@@ -2,6 +2,7 @@ import os
 from importlib import reload
 from unittest import mock
 
+import numpy as np
 import pytest
 import requests
 
@@ -100,3 +101,23 @@ def test_lookup_patient(jh_client):
 def test_list_data_sources(jh_client):
     data_sources = list(jh_client.list_data_sources())
     assert len(data_sources) == 2
+
+
+def test_list_observations(jh_client):
+    jh_client._default_page_size = 2
+    observations = list(jh_client.list_observations(patient_id=40018))
+    assert len(observations) == 3
+
+
+def test_list_observations_df(jh_client):
+    jh_client._default_page_size = 2
+    df = jh_client.list_observations_df(patient_id=40018)
+    assert len(df) == 3
+    assert "code" in df.columns
+    assert set(df.code.unique()) == {"omh:heart-rate:2.0"}
+    assert "heart_rate_value" in df.columns
+    assert df.heart_rate_value.dtype == np.float64
+    assert "effective_time_frame_date_time" in df.columns
+    assert df.effective_time_frame_date_time.dt.hour.all()
+    assert "source_creation_date_time_local" in df.columns
+    assert df.source_creation_date_time_local.dt.hour.all()
