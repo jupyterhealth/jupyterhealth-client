@@ -51,4 +51,4 @@ jobs:
           python3 -m pytest --cov=jupyterhealth_client tests
 
       - name: upload coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
