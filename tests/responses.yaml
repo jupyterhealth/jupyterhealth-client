@@ -120,7 +120,10 @@
       results:
         - birthDate: '1955-01-01'
           id: 40001
-          identifier: demouser-min
+          identifiers:
+            - id: 1
+              value: demouser-min
+              system: medplum
           jheUserId: 10007
           nameFamily: Patient
           nameGiven: Demo
@@ -135,7 +138,11 @@
           telecomPhone:
         - birthDate: '1980-01-01'
           id: 40002
-          identifier: demouser-simon
+          # deprecated identifier format
+          identifiers:
+            - id: 1
+              value: demouser-simon
+              system: medplum
           jheUserId: 10011
           nameFamily: Patient
           nameGiven: Simon
@@ -152,7 +159,13 @@
     json:
       birthDate: '1955-01-01'
       id: 40001
-      identifier: demouser-min
+      identifiers:
+        - id: 1
+          value: other-value
+          system: medplum
+        - id: 2
+          value: demouser-min
+          system: something
       jheUserId: 10007
       nameFamily: Patient
       nameGiven: Demo
@@ -172,7 +185,10 @@
   - url: /api/v1/patients/global_lookup?email=demouser%40jupyterhealth.example.org
     json:
       - id: 40001
-        identifier: demouser-min
+        identifiers:
+          - id: 1
+            value: demouser-min
+            system: medplum
         jheUserId: 10007
   - url: /api/v1/patients/global_lookup?email=nosuchuser%40jupyterhealth.example.org
     json: []
