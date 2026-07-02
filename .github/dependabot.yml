@@ -4,5 +4,11 @@ updates:
   # Maintain dependencies in our GitHub Workflows
   - package-ecosystem: github-actions
     directory: /
+    groups:
+      actions:
+        patterns:
+          - '*'
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 7
