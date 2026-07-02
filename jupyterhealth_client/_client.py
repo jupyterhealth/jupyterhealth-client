@@ -226,11 +226,23 @@ class JupyterHealthClient:
         return patient
 
     def lookup_patient(
-        self, *, email: str | None = None, external_id: str | None = None
+        self,
+        *,
+        email: str | None = None,
+        external_id: str | None = None,
+        system: str | None = None,
     ) -> dict[str, Any] | None:
         """Lookup a patient by email or external id.
 
-        Raises KeyError if no patient is found, otherwise returns patient record.
+        system (optional): str
+            Specify system for external id lookup.
+
+            If system is not specified, any matching external identifier value will be considered a match.
+
+        Raises:
+            KeyError: if no patient is found
+        Returns:
+            dict: patient record, if found
         """
         if email is None and external_id is None:
             raise TypeError(
@@ -247,11 +259,16 @@ class JupyterHealthClient:
         elif external_id:
             # TODO: this should be a single lookup, but no API in JHE yet
             for patient in self.list_patients():
-                if patient["identifier"] == external_id:
-                    return patient
-            raise KeyError(
-                f"No patient found with external identifier: {external_id!r}"
-            )
+                for identifier in patient["identifiers"]:
+                    if external_id == identifier["value"] and (
+                        system is None or system == identifier["system"]
+                    ):
+                        return patient
+
+            system_id = external_id
+            if system:
+                system_id = f"{system}::{external_id}"
+            raise KeyError(f"No patient found with external identifier: {system_id!r}")
 
     def get_patient_by_external_id(self, external_id: str) -> dict[str, Any]:
         """Get a single patient by external id.
