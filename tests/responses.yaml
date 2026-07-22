@@ -206,7 +206,7 @@
           name: Some Device
           supportedScopes: []
           type: personal_device
-  - url: /fhir/r5/Observation?_count=2&patient=40018
+  - url: /FHIR/R5/Observation?_count=2&patient=40018
     json:
       entry:
         - resource:
@@ -257,14 +257,14 @@
                 ZGF0ZV90aW1lIjogIjIwMjYtMDItMTFUMjI6Mzk6MDkrMDA6MDAifX0=
       link:
         - relation: self
-          url: https://jhe.local/fhir/r5/Observation?_count=2&patient=40018
+          url: https://jhe.local/FHIR/R5/Observation?_count=2&patient=40018
         - relation: next
-          url: https://jhe.local/fhir/r5/Observation?_count=2&_page=2&patient=40018
+          url: https://jhe.local/FHIR/R5/Observation?_count=2&_page=2&patient=40018
       meta: {}
       resourceType: Bundle
       total: 3
       type: searchset
-  - url: /fhir/r5/Observation?_count=2&patient=40018&_page=2
+  - url: /FHIR/R5/Observation?_count=2&patient=40018&_page=2
     json:
       entry:
         - resource:
@@ -292,9 +292,9 @@
                 ZGF0ZV90aW1lIjogIjIwMjYtMDItMTFUMjI6Mzk6MDkrMDA6MDAifX0=
       link:
         - relation: self
-          url: https://jhe.local/fhir/r5/Observation?_count=2&patient=40018&_page=2
+          url: https://jhe.local/FHIR/R5/Observation?_count=2&patient=40018&_page=2
         - relation: previous
-          url: https://jhe.local/fhir/r5/Observation?_count=2&patient=40018
+          url: https://jhe.local/FHIR/R5/Observation?_count=2&patient=40018
       meta: {}
       resourceType: Bundle
       total: 3

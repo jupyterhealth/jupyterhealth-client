@@ -123,7 +123,7 @@ class JupyterHealthClient:
             url = URL(path)
         else:
             if fhir:
-                url = self._url / "fhir/r5"
+                url = self._url / "FHIR/R5"
             else:
                 url = self._url / "api/v1"
             url = url / path
