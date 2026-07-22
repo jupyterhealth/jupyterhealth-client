@@ -19,7 +19,7 @@ repos:
 
   # strip output because notebook outputs are not shareable
   - repo: https://github.com/kynan/nbstripout
-    rev: 34071b78c181af3bf5af955c1426466e096fc3db  # frozen: 0.9.1
+    rev: f5da19ce3b7b40e97c12ee9cd8ce97f48f97ddf7  # frozen: 0.9.1
     hooks:
       - id: nbstripout
 
@@ -32,7 +32,7 @@ repos:
 
   # Autoformat: markdown
   - repo: https://github.com/executablebooks/mdformat
-    rev: 82912cdaea4fb830f751504486a7879c70526547  # frozen: 1.0.0
+    rev: 2d496dbc18e31b83a1596685347ffe0b6041daf0  # frozen: 1.0.0
     hooks:
       - id: mdformat
         additional_dependencies:
