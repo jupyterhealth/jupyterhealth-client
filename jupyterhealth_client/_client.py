@@ -141,11 +141,20 @@ class JupyterHealthClient:
             # return None for empty response body
             return None
 
-    def _list_api_request(self, path: str, **kwargs) -> Generator[dict[str, Any]]:
+    def _list_api_request(
+        self, path: str, limit=None, **kwargs
+    ) -> Generator[dict[str, Any]]:
         """Get a list from an /api/v1 endpoint"""
         r: dict = self._api_request(path, **kwargs)
+        count: int = 0
         yield from r["results"]
-        # TODO: handle pagination fields
+        count += len(r["results"])
+        while r.get("next", None) and (limit is None or count < limit):
+            response = self.session.get(r["next"])
+            response.raise_for_status()
+            r = response.json()
+            yield from r["results"]
+            count += len(r["results"])
 
     @staticmethod
     def _get_link(bundle, rel):
