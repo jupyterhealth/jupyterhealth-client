@@ -121,3 +121,40 @@ def test_list_observations_df(jh_client):
     assert df.effective_time_frame_date_time.dt.hour.all()
     assert "source_creation_date_time_local" in df.columns
     assert df.source_creation_date_time_local.dt.hour.all()
+
+
+def test_get_fhir_capability(jh_client):
+    cs = jh_client.get_fhir_capability_statement()
+    assert cs["resourceType"] == "CapabilityStatement"
+
+
+def test_list_fhir_resource_types(jh_client):
+    resource_types = jh_client.list_fhir_resource_types()
+    assert resource_types == [
+        "AllergyIntolerance",
+        "CarePlan",
+        "CareTeam",
+        "Condition",
+        "Coverage",
+        "Device",
+        "DiagnosticReport",
+        "DocumentReference",
+        "Encounter",
+        "Goal",
+        "Group",
+        "Immunization",
+        "Location",
+        "Medication",
+        "MedicationDispense",
+        "MedicationRequest",
+        "Observation",
+        "Organization",
+        "Patient",
+        "Practitioner",
+        "PractitionerRole",
+        "Procedure",
+        "Provenance",
+        "QuestionnaireResponse",
+        "RelatedPerson",
+        "ServiceRequest",
+    ]

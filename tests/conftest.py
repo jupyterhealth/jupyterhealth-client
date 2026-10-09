@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,17 @@ HOST = "https://jhe.local"
 _response_yaml = Path(__file__).parent / "responses.yaml"
 with _response_yaml.open() as f:
     response_list = yaml.safe_load(f)
+
+_responses = Path(__file__).parent / "responses"
+
+with (_responses / "fhir-r5-metadata.json").open() as f:
+    meta = json.load(f)
+    response_list.append(
+        {
+            "url": "/FHIR/R5/metadata",
+            "json": meta,
+        }
+    )
 
 for response in response_list:
     response.setdefault("method", "GET")

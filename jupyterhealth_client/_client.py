@@ -108,9 +108,6 @@ class JupyterHealthClient:
         self, path: str, *, method: str = "GET", check=True, fhir=False, **kwargs
     ) -> dict[str, Any] | None: ...
 
-    # preserve private alias
-    _api_request = api_request
-
     def api_request(
         self,
         path: str,
@@ -161,6 +158,9 @@ class JupyterHealthClient:
         else:
             # return None for empty response body
             return None
+
+    # preserve private alias
+    _api_request = api_request
 
     def _list_api_request(
         self, path: str, limit=None, **kwargs
@@ -235,6 +235,87 @@ class JupyterHealthClient:
         """
         user = cast(dict[str, Any], self._api_request("users/profile"))
         return user
+
+    def list_fhir_resource_types(self) -> list[str]:
+        """Return list of supported FHIR resource types
+
+        Uses `GET /FHIR/R5/metadata`
+        """
+        capability_statement = self.get_fhir("metadata")
+        resource_types = []
+        for server in capability_statement["rest"]:
+            for resource in server["resource"]:
+                resource_types.append(resource["type"])
+        return resource_types
+
+    def get_fhir_capability_statement(self) -> dict:
+        """Return the FHIR CapabilityStatement
+
+        from `GET /FHIR/R5/metadata`
+        """
+        return self.get_fhir("metadata")
+
+    def get_fhir(
+        self,
+        resource_type: str,
+        id=None,
+        *,
+        patient_id=None,
+        study_id=None,
+        fhir_source=None,
+        params=None,
+    ):
+        """Get a single FHIR resource"""
+        params = params or {}
+        if study_id:
+            params["patient._has:Group:member:_id"] = study_id
+        if patient_id:
+            params["patient"] = patient_id
+        if fhir_source == "imported":
+            params["_source:below"] = "https://jupyterhealth.org/fhir/fhir-source/"
+        elif fhir_source is not None:
+            if not fhir_source.startswith("https://"):
+                fhir_source = (
+                    f"https://jupyterhealth.org/fhir/fhir-source/{fhir_source}"
+                )
+            params["_source"] = fhir_source
+
+        resource = resource_type
+        if id:
+            resource = f"{resource_type}/{id}"
+
+        return self._api_request(resource, fhir=True, params=params)
+
+    def list_fhir(
+        self,
+        resource_type,
+        *,
+        patient_id=None,
+        study_id=None,
+        fhir_source=None,
+        limit=None,
+        params=None,
+    ):
+        """
+        List a fhir resource type.
+
+        Returns a Generator yielding the resources.
+        """
+        params = params or {}
+        if study_id:
+            params["patient._has:Group:member:_id"] = study_id
+        if patient_id:
+            params["patient"] = patient_id
+        if fhir_source == "imported":
+            params["_source:below"] = "https://jupyterhealth.org/fhir/fhir-source/"
+        elif fhir_source is not None:
+            if not fhir_source.startswith("https://"):
+                fhir_source = (
+                    f"https://jupyterhealth.org/fhir/fhir-source/{fhir_source}"
+                )
+            params["_source"] = fhir_source
+
+        return self._fhir_list_api_request(resource_type, limit=limit, params=params)
 
     def get_patient(self, id: int) -> dict[str, Any]:
         """Get a single patient by id.
