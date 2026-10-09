@@ -140,6 +140,14 @@ class JupyterHealthClient:
             else:
                 url = self._url / "api/v1"
             url = url / path
+
+        # make sure content
+        headers = kwargs.setdefault("headers", {})
+        if kwargs.get("data") and "content-type" not in {
+            key.lower() for key in headers
+        }:
+            headers["Content-Type"] = "application/json"
+
         r = self.session.request(method, str(url), **kwargs)
         if check:
             try:
