@@ -71,6 +71,7 @@ class JupyterHealthClient:
     """
 
     _default_page_size = 1000
+    url: str
 
     def __init__(
         self,
@@ -93,21 +94,24 @@ class JupyterHealthClient:
             raise ValueError(
                 "Set $JHE_TOKEN environment variable or pass via `token=` argument"
             )
-        self._url = URL(url)
+        self._url = self.url = URL(url)
         self.session = requests.Session()
         self.session.headers = {"Authorization": f"Bearer {token}"}
 
     @overload
-    def _api_request(
+    def api_request(
         self, path: str, *, return_response: Literal[True], **kwargs
     ) -> requests.Response: ...
 
     @overload
-    def _api_request(
+    def api_request(
         self, path: str, *, method: str = "GET", check=True, fhir=False, **kwargs
     ) -> dict[str, Any] | None: ...
 
-    def _api_request(
+    # preserve private alias
+    _api_request = api_request
+
+    def api_request(
         self,
         path: str,
         *,
@@ -117,7 +121,16 @@ class JupyterHealthClient:
         fhir=False,
         **kwargs,
     ) -> dict[str, Any] | requests.Response | None:
-        """Make an API request"""
+        """Make a single API request
+
+        Args:
+            path (str): API path
+            method (str): HTTP Method (defualt: GET)
+            check (bool): whether to raise on HTTP error (default: True)
+            return_response (bool): if True, return raw HTTPResponse object (default: False, return parsed JSON)
+            fhir: if True, make request to the /FHIR/R5/ API
+                (default: False, use /api/v1/)
+        """
         if "://" in path:
             # full url
             url = URL(path)
