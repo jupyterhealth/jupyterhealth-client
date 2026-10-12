@@ -2,7 +2,7 @@
 client library for JupyterHealth Exchange
 """
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 from ._client import Code, JupyterHealthClient, RequestError
 from ._utils import tidy_observation
